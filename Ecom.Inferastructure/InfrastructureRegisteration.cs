@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ecom.Core.Interfaces;
+using Ecom.Core.Service;
 using Ecom.Inferastructure.Data;
 using Ecom.Inferastructure.Repository;
+using Ecom.Inferastructure.Repository.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace Ecom.Inferastructure
 {
@@ -21,6 +24,9 @@ namespace Ecom.Inferastructure
             //services.AddScoped<ICategoryRepository, CategoryRepository>();
             //services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<IImageManagementService, ImageManagementService>();
+            services.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("EcomDatabase"));
