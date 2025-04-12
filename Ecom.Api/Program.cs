@@ -1,7 +1,9 @@
+using Ecom.Api.Middlrware;
 using Ecom.Inferastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMemoryCache();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -18,9 +20,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ExceptionsMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 app.UseAuthorization();
 
 app.MapControllers();
